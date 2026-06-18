@@ -1,10 +1,9 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
-import jakarta.persistence.Table;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +15,7 @@ public class Utilisateur{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "nom")
     private String nom;
@@ -31,13 +30,13 @@ public class Utilisateur{
     private String role;
 
     @Column(name="date_creation")
-    private LocalDateTime dateCreation;
+    private LocalDate dateCreation;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -73,11 +72,11 @@ public class Utilisateur{
         this.role = role;
     }
 
-    public LocalDateTime getDateCreation() {
+    public LocalDate getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDateTime dateCreation) {
+    public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
     }
 

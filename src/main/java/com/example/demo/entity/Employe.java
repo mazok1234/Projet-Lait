@@ -1,17 +1,16 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 
 @Entity
@@ -20,7 +19,7 @@ public class Employe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @OneToOne
     @JoinColumn(name="user_id")
@@ -31,7 +30,7 @@ public class Employe {
     private Poste poste;
 
     @Column(name="date_embauche")
-    private LocalDateTime dateEmbauche;
+    private LocalDate dateEmbauche;
 
     @Column(name="salaire_base")
     private Double salaireBase;
@@ -42,8 +41,64 @@ public class Employe {
     @Column(name="is_actif")
     private Boolean isActif;
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+    public Poste getPoste() {
+        return poste;
+    }
+
+    public void setPoste(Poste poste) {
+        this.poste = poste;
+    }
+
+    public LocalDate getDateEmbauche() {
+        return dateEmbauche;
+    }
+
+    public void setDateEmbauche(LocalDate dateEmbauche) {
+        this.dateEmbauche = dateEmbauche;
+    }
+
+    public Double getSalaireBase() {
+        return salaireBase;
+    }
+
+    public void setSalaireBase(Double salaireBase) {
+        this.salaireBase = salaireBase;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public Boolean getIsActif() {
+        return isActif;
+    }
+
+    public void setIsActif(Boolean isActif) {
+        this.isActif = isActif;
+    }
+
+    
+    
 
 
 }
