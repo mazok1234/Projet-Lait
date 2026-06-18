@@ -155,6 +155,14 @@
                     name="annee"
                     placeholder="Année">
 
+            <select name="employeId">
+                <option value="">Tous les employés</option>
+                <option th:each="employe : ${employes}"
+                        th:value="${employe.id}"
+                        th:text="${employe.utilisateur.nom}">
+                </option>
+            </select>
+
             <button type="submit">
                 Filtrer
             </button>
@@ -193,7 +201,7 @@
 
         <a
                 class="generate-btn"
-                th:href="@{/fichePaie/generer}">
+                th:href="@{/fichePaie/generate-page}">
             Générer une fiche
         </a>
 
