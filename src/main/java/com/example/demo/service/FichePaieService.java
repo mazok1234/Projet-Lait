@@ -25,4 +25,11 @@ public class FichePaieService {
         return fichePaieRepository.findByMoisAndAnneeAndEmploye(mois, annee, idEmploye);
     }
 
+    public FichePaie findTopByEmployeOrderByDatePaiementDesc(Employe employe){
+        return fichePaieRepository.findTopByEmployeOrderByDatePaiementDesc(employe);
+    }  
+    public void saveFichePaie(FichePaie fichePaie){
+        fichePaieRepository.save(fichePaie);
+    }
+
 }

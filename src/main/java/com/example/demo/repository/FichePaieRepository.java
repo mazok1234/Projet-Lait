@@ -1,13 +1,12 @@
 package com.example.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
-import com.example.demo.entity.Employe;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
+import com.example.demo.entity.Employe;
 import com.example.demo.entity.FichePaie;
 
 public interface FichePaieRepository extends JpaRepository<FichePaie, Integer> {
@@ -21,5 +20,8 @@ List<FichePaie> findByMoisAndAnneeAndEmploye(
     @Param("annee") Integer annee,
     @Param("employeId") Integer employeId
 );
+
+FichePaie findTopByEmployeOrderByDatePaiementDesc(Employe employe);
+
 
 }
