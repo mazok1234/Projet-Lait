@@ -54,9 +54,19 @@ public class FichePaieController {
         Employe employe = employeService.getEmployeById(employeId);
         if (employe == null) {
             model.addAttribute("error", "Employé non trouvé");
-            return "fichePaie/generate";
+            List<Employe> employes = employeService.getAllEmploye();
+            model.addAttribute("employes", employes);
+            return "fichePaie/generer";
         }
 
+        List<FichePaie> existingFiches = fichePaieService.findByMoisAndAnneeAndEmploye(mois, annee, employeId);
+        if (!existingFiches.isEmpty()) {
+            model.addAttribute("error", "Une fiche de paie pour cet employé et cette période existe déjà.");
+            List<Employe> employes = employeService.getAllEmploye();
+            model.addAttribute("employes", employes);
+            return "fichePaie/generer";
+        }
+        
         Integer monthly_working_days = 22;
 
         Integer totalAbscence = 0; // attendre configuration des conges
