@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiches de Paie</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            display:flex;
+            background:#f5f6fa;
+            min-height:100vh;
+        }
+
+        /* Sidebar */
+
+        .sidebar{
+            width:220px;
+            background:white;
+            border-right:1px solid #ddd;
+            padding:20px;
+        }
+
+        .logo{
+            margin-bottom:40px;
+        }
+
+        .logo h2{
+            color:#0d6efd;
+        }
+
+        .logo p{
+            color:#666;
+            font-size:14px;
+        }
+
+        .menu a{
+            display:block;
+            text-decoration:none;
+            color:#333;
+            padding:12px;
+            border-radius:8px;
+            margin-bottom:8px;
+        }
+
+        .menu a.active{
+            background:#0d6efd;
+            color:white;
+        }
+
+        /* Content */
+
+        .content{
+            flex:1;
+            padding:30px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 1px 5px rgba(0,0,0,0.08);
+        }
+
+        h1{
+            margin-bottom:20px;
+        }
+
+        .filters{
+            display:flex;
+            gap:10px;
+            margin-bottom:20px;
+        }
+
+        .filters input{
+            padding:10px;
+            border:1px solid #ccc;
+            border-radius:6px;
+        }
+
+        .filters button{
+            padding:10px 20px;
+            border:none;
+            background:#0d6efd;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th, td{
+            padding:12px;
+            border-bottom:1px solid #ddd;
+            text-align:left;
+        }
+
+        th{
+            background:#f3f5f7;
+        }
+
+        .generate-btn{
+            margin-top:20px;
+            display:inline-block;
+            padding:12px 20px;
+            background:#0d6efd;
+            color:white;
+            text-decoration:none;
+            border-radius:6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+        <h2>Lait's Go</h2>
+        <p>Dairy Logistics</p>
+    </div>
+
+    <div class="menu">
+        <a href="#">Detail des employes</a>
+
+    </div>
+
+</div>
+
+<div class="content">
+
+    <h1>Liste des fiches de paie</h1>
+
+    <div class="card">
+
+        <form class="filters"
+              th:action="@{/fichePaie/list}"
+              method="get">
+
+            <input
+                    type="number"
+                    name="mois"
+                    placeholder="Mois">
+
+            <input
+                    type="number"
+                    name="annee"
+                    placeholder="Année">
+
+            <select name="employeId">
+                <option value="">Tous les employés</option>
+                <option th:each="employe : ${employes}"
+                        th:value="${employe.id}"
+                        th:text="${employe.utilisateur.nom}">
+                </option>
+            </select>
+
+            <button type="submit">
+                Filtrer
+            </button>
+
+        </form>
+
+        <table>
+
+            <thead>
+            <tr>
+                <th>Employé</th>
+                <th>Date paiement</th>
+                <th>Montant net</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each="fiche : ${fichePaies}">
+                <td th:text="${fiche.employe.utilisateur.nom}">
+                    Nom
+                </td>
+
+                <td th:text="${fiche.datePaiement}">
+                    Date
+                </td>
+
+                <td th:text="${fiche.montantNet}">
+                    Montant
+                </td>
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <a
+                class="generate-btn"
+                th:href="@{/fichePaie/generer}">
+            Générer une fiche
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

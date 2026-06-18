@@ -12,6 +12,14 @@ import com.example.demo.entity.FichePaie;
 
 public interface FichePaieRepository extends JpaRepository<FichePaie, Integer> {
 
-    @Query("SELECT fp from FichePaie fp where (:mois IS NULL or fp.mois = :mois) and (:annee IS NULL or fp.annee = :annee) and (:employe IS NULL or fp.employe = :employe) ")
-    List<FichePaie> findByMoisAndAnneeAndEmploye(@Param("mois") Integer mois, @Param("annee") Integer annee, @Param("employe") Employe employe);
+@Query("SELECT fp FROM FichePaie fp WHERE " +
+       "(:mois IS NULL OR fp.mois = :mois) AND " +
+       "(:annee IS NULL OR fp.annee = :annee) AND " +
+       "(:employeId IS NULL OR fp.employe.id = :employeId)")
+List<FichePaie> findByMoisAndAnneeAndEmploye(
+    @Param("mois") Integer mois,
+    @Param("annee") Integer annee,
+    @Param("employeId") Integer employeId
+);
+
 }
