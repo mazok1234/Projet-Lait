@@ -21,4 +21,8 @@ public class EmployeService {
         return EmployeRepository.findAll();
     }
 
+    public Employe getEmployeById(Integer id) {
+        return EmployeRepository.findById(id).orElse(null);
+    }
+
 }
