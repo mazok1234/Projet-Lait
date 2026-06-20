@@ -34,9 +34,9 @@ public class FichePaieController {
     @GetMapping("/fichePaie/list")
     public String listFichePaie(@RequestParam(name = "mois" , required = false) Integer mois, @RequestParam(name = "annee", required = false) Integer annee,@RequestParam(name = "employeId", required= false) Integer employeId, Model model) {
 
-    // List<FichePaie> fichePaies = fichePaieService.findByMoisAndAnneeAndEmploye(mois, annee, employeId);
+    List<FichePaie> fichePaies = fichePaieService.findByMoisAndAnneeAndEmploye(mois, annee, employeId);
     List<Employe> employes = employeService.getAllEmploye();
-    List<FichePaie> fichePaies = fichePaieService.getAllFichePaie();
+    // List<FichePaie> fichePaies = fichePaieService.getAllFichePaie();
 
     model.addAttribute("fichePaies", fichePaies);
     model.addAttribute("employes", employes);
