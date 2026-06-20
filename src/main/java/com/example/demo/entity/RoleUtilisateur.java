@@ -9,8 +9,8 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name="employeepostes")
-public class Poste{ // NE PAS CHANGER EN EmployeesPostes
+@Table(name="roleutilisateur")
+public class RoleUtilisateur{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

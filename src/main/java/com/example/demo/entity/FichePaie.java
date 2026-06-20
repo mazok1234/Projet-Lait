@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "fiches_paie")
+@Table(name = "fichespaie")
 public class FichePaie {
 
     @Id
@@ -20,7 +21,7 @@ public class FichePaie {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "employe_id")
+    @JoinColumn(name = "employeid")
     private Employe employe;
 
     @Column(name = "mois")
@@ -29,20 +30,19 @@ public class FichePaie {
     @Column(name = "annee")
     private Integer annee;
 
-    @Column(name = "jours_travailles")
-    private Integer joursTravailles;
-
-    @Column(name = "jours_conge")
-    private Integer joursConge;
-
-    @Column(name = "montant_brut")
+    @Column(name = "montantbrut")
     private Double montantBrut;
 
-    @Column(name = "montant_net")
+    @Column(name = "montantnet")
     private Double montantNet;
 
-    @Column(name = "date_paiement")
+    @Column(name = "datepaiement")
     private LocalDate datePaiement;
+
+    @Column(name = "datecreation")
+    private LocalDateTime dateCreation;
+
+    
 
     public Integer getId() {
         return id;
@@ -76,22 +76,6 @@ public class FichePaie {
         this.annee = annee;
     }
 
-    public Integer getJoursTravailles() {
-        return joursTravailles;
-    }
-
-    public void setJoursTravailles(Integer joursTravailles) {
-        this.joursTravailles = joursTravailles;
-    }
-
-    public Integer getJoursConge() {
-        return joursConge;
-    }
-
-    public void setJoursConge(Integer joursConge) {
-        this.joursConge = joursConge;
-    }
-
     public Double getMontantBrut() {
         return montantBrut;
     }
@@ -114,5 +98,13 @@ public class FichePaie {
 
     public void setDatePaiement(LocalDate datePaiement) {
         this.datePaiement = datePaiement;
+    }
+
+    public LocalDateTime getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
     }
 }

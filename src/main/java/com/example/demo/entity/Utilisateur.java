@@ -1,12 +1,15 @@
 package com.example.demo.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,11 +29,16 @@ public class Utilisateur{
     @Column(name="password")
     private String password;
 
-    @Column(name="role")
-    private String role;
+    @ManyToOne
+    @JoinColumn(name="roleutilisateur")
+    private RoleUtilisateur role;
 
-    @Column(name="date_creation")
-    private LocalDate dateCreation;
+    @OneToOne
+    @JoinColumn(name="employeid")
+    private Employe employe;
+
+    @Column(name="datecreation")
+    private LocalDateTime dateCreation;
 
     public Integer getId() {
         return id;
@@ -64,20 +72,29 @@ public class Utilisateur{
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public LocalDate getDateCreation() {
+    public LocalDateTime getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDate dateCreation) {
+    public void setDateCreation(LocalDateTime dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public RoleUtilisateur getRole() {
+        return role;
+    }
+
+    public void setRole(RoleUtilisateur role) {
+        this.role = role;
+    }
+
+    public Employe getEmploye() {
+        return employe;
+    }
+
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
     }
 
 
