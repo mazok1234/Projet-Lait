@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="finance/index :: layout(contenu=~{::.contenu})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lait's Go - Statistiques</title>
+</head>
+<body>
+<div class="contenu">
+    <div class="page-content">
+        <div class="page-header">
+            <h1 class="page-title">Statistiques</h1>
+            <p class="page-subtitle">Analyse des recettes et dépenses par période</p>
+        </div>
+
+        <div class="content-grid grid-full">
+            <div class="card card-table">
+                <div class="card-header">
+                    <h2 class="card-title">Filtres</h2>
+                </div>
+                <div class="card-body">
+                    <form class="stat-filters" th:action="@{/finance/statistique}" method="get">
+                        <div class="filter-group">
+                            <label>Jour</label>
+                            <input type="number" name="jour" min="1" max="31" placeholder="15" th:value="${jour}">
+                        </div>
+                        <div class="filter-group">
+                            <label>Mois</label>
+                            <input type="number" name="mois" min="1" max="12" placeholder="6" th:value="${mois}">
+                        </div>
+                        <div class="filter-group">
+                            <label>Année</label>
+                            <input type="number" name="annee" min="2000" max="2100" placeholder="2026" th:value="${annee}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Appliquer
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #E8F5E9; color: #2E7D32;">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="stat-label">Total recettes</div>
+                    <div class="stat-value" style="color: #2E7D32;" th:text="${#numbers.formatDecimal(recettes, 1, 2)} + ' Ar'">0,00 Ar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #FFEBEE; color: #C62828;">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="stat-label">Total dépenses</div>
+                    <div class="stat-value" style="color: #C62828;" th:text="${#numbers.formatDecimal(depenses, 1, 2)} + ' Ar'">0,00 Ar</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #E3F2FD; color: #007AFF;">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-label">Bénéfice net</div>
+                    <div class="stat-value" style="color: #007AFF;" th:text="${#numbers.formatDecimal(benefice, 1, 2)} + ' Ar'">0,00 Ar</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

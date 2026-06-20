@@ -368,6 +368,229 @@ ul {
     font-weight: 500;
 }
 
+/* --- Filtres (historique) --- */
+.filters {
+    display: flex;
+    gap: 16px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #F0EEF0;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filters input {
+    padding: 8px 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.filters input:focus {
+    border-color: #007AFF;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+}
+
+.filter-label {
+    font-size: 0.8rem;
+    color: #6B7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.filter-search {
+    min-width: 200px;
+    flex: 1;
+}
+
+.filter-date {
+    min-width: 160px;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+}
+
+/* --- Tri (historique) --- */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortable:hover {
+    color: #007AFF;
+}
+
+.sortable i {
+    margin-left: 4px;
+    font-size: 0.7rem;
+}
+
+/* --- Pagination (historique) --- */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-top: 1px solid #F0EEF0;
+}
+
+.pagination .btn {
+    min-width: 120px;
+    justify-content: center;
+}
+
+.pagination .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 0.875rem;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+/* --- Aucun résultat (historique) --- */
+.no-result {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    color: #9CA3AF;
+}
+
+.no-result i {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+    display: block;
+}
+
+.no-result p {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* --- Filtres stats (statistique) --- */
+.stat-filters {
+    display: flex;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #F0EEF0;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.stat-filters .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-filters label {
+    font-size: 0.75rem;
+    color: #6B7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stat-filters input {
+    padding: 8px 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    width: 100px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.stat-filters input:focus {
+    border-color: #007AFF;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+}
+
+/* --- Grille stats (statistique) --- */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 24px;
+}
+
+.stat-card {
+    background: #FFFFFF;
+    border: 1px solid #F0EEF0;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+}
+
+.stat-card .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin: 0 auto 12px;
+}
+
+.stat-card .stat-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.stat-card .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+/* --- Utilitaires --- */
+.grid-full {
+    grid-template-columns: 1fr !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+/* --- Badges --- */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-success {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
+.badge-danger {
+    background-color: #FFEBEE;
+    color: #C62828;
+}
+
 /* --- Buttons --- */
 .btn {
     display: inline-flex;
