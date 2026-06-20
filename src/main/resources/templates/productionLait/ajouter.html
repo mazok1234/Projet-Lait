@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lait's Go - Saisir Production</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            background: #ffffff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #0f172a;
+            font-size: 22px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #334155;
+            background-color: #fff;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 11px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+
+        .alert {
+            max-width: 500px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <p th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <div class="form-container">
+        <h2>Saisir la production de lait</h2>
+
+        <form th:action="@{/sauvegarder_lait}" th:object="${productionLait}" method="POST">
+
+            <div class="form-group">
+                <label for="dateProduction">Date et Heure de la traite :</label>
+                <input type="datetime-local" id="dateProduction" th:field="*{dateProduction}" required />
+            </div>
+
+            <div class="form-group">
+                <label for="cycleBovin">Sélectionner la vache (En lactation à cette date) :</label>
+                <select id="cycleBovin" th:field="*{cycleBovin}" required>
+                    <option value="">-- Choisir une date d'abord --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantite">Quantité récoltée (en Litres) :</label>
+                <input type="number" id="quantite" th:field="*{quantite}" step="0.01" min="0" placeholder="Ex: 14.50"
+                    required />
+            </div>
+
+            <div class="btn-container">
+                <a th:href="@{/}" class="btn btn-secondary">Annuler</a>
+                <button type="submit" class="btn btn-primary">Enregistrer la traite</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('dateProduction');
+            const selectCycle = document.getElementById('cycleBovin');
+
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            dateInput.value = now.toISOString().slice(0, 16);
+
+            chargerCyclesParDate(dateInput.value.split('T')[0]);
+
+            dateInput.addEventListener('change', function () {
+                const dateValue = this.value.split('T')[0];
+                if (dateValue) {
+                    chargerCyclesParDate(dateValue);
+                }
+            });
+
+            function chargerCyclesParDate(date) {
+                selectCycle.innerHTML = '<option value="">Chargement...</option>';
+
+                fetch(`/api/cycles/lactation?date=${date}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Erreur réseau');
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        selectCycle.innerHTML = '<option value="">-- Choisir un cycle actif --</option>';
+                        if (data.length === 0) {
+                            selectCycle.innerHTML = '<option value="">Aucune vache en lactation à cette date</option>';
+                            return;
+                        }
+                        data.forEach(c => {
+                            const option = document.createElement('option');
+                            option.value = c.id;
+                            option.textContent = `Boucle N°: ${c.numeroBoucle} (${c.etatLibelle})`;
+                            selectCycle.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        selectCycle.innerHTML = '<option value="">Erreur lors du chargement</option>';
+                            });
+                    }
+    });
+    </script>
+
+</body>
+
+</html>
