@@ -1,7 +1,5 @@
-CREATE DATABASE LaitsGo;
-\c LaitsGo;
-
--- MODULE 1 — LOGIN
+CREATE DATABASE laitsgo;
+\c laitsgo;
 
 CREATE TABLE RoleUtilisateur(
     Id SERIAL PRIMARY KEY,
@@ -51,7 +49,6 @@ CREATE TABLE Utilisateurs(
     FOREIGN KEY(EmployeId) REFERENCES Employes(Id)
 );
 
--- MODULE 2 — CHAPTEL ET PRODUCTION
 
 CREATE TABLE Races(
     Id SERIAL PRIMARY KEY,
@@ -114,7 +111,6 @@ CREATE TABLE ProductionLait(
     FOREIGN KEY(IdUser) REFERENCES Utilisateurs(Id)
 );
 
--- MODULE 3 — RESPONSABLE FINANCIER
 
 CREATE TABLE CategoriesTransaction(
     Id SERIAL PRIMARY KEY,
@@ -146,8 +142,6 @@ SELECT
     SUM(CASE WHEN tt.Libelle = 'recette' THEN t.Montant WHEN tt.Libelle = 'depense' THEN -t.Montant ELSE 0 END) AS BeneficeNet
 FROM Transactions t
 JOIN TypesTransaction tt ON t.TypeId = tt.Id;
-
--- MODULE 4 — GESTION DU STOCK ALIMENTAIRE
 
 CREATE TABLE Fournisseurs(
     Id SERIAL PRIMARY KEY,
@@ -208,8 +202,6 @@ LEFT JOIN MouvementsStock m ON mf.MouvementStockId = m.Id
 LEFT JOIN TypeMouvement tm ON m.TypeId = tm.Id
 GROUP BY a.Id, a.Nom, a.Unite;
 
--- MODULE 5 — SUIVI CLIENTS ET COMMANDES
-
 CREATE TABLE Clients(
     Id SERIAL PRIMARY KEY,
     Nom VARCHAR(200) NOT NULL,
@@ -263,7 +255,6 @@ CREATE TABLE CommandeStatus(
     FOREIGN KEY(StatutId) REFERENCES StatutCommande(Id)
 );
 
--- MODULE 6 — GESTION DES EMPLOYÉS (RH)
 
 CREATE TABLE HistoriqueSalaire(
     Id SERIAL PRIMARY KEY,
@@ -327,7 +318,6 @@ CREATE TABLE FichesPaie(
     FOREIGN KEY(EmployeId) REFERENCES Employes(Id)
 );
 
--- TRIGGERS
 
 CREATE OR REPLACE FUNCTION InsertTransactionCommande()
 RETURNS TRIGGER AS $$

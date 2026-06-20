@@ -2,7 +2,8 @@ package com.example.demo.controller;
 
 import java.util.List;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
+
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,25 +14,29 @@ import com.example.demo.entity.Employe;
 import com.example.demo.entity.FichePaie;
 import com.example.demo.service.EmployeService;
 import com.example.demo.service.FichePaieService;
+import com.example.demo.service.HistoriqueSalaireService;
 
 @Controller
 public class FichePaieController {
     private final FichePaieService fichePaieService;
+    private final HistoriqueSalaireService historiqueSalaireService;
     private final EmployeService employeService;
 
     public FichePaieController(FichePaieService fichePaieService,
-                                EmployeService employeService){
+                                EmployeService employeService,
+                                HistoriqueSalaireService historiqueSalaireService) {
         this.fichePaieService = fichePaieService;
         this.employeService = employeService;
+        this.historiqueSalaireService = historiqueSalaireService;
     }
 
 
     @GetMapping("/fichePaie/list")
     public String listFichePaie(@RequestParam(name = "mois" , required = false) Integer mois, @RequestParam(name = "annee", required = false) Integer annee,@RequestParam(name = "employeId", required= false) Integer employeId, Model model) {
 
-    List<FichePaie> fichePaies = fichePaieService.findByMoisAndAnneeAndEmploye(mois, annee, employeId);
+    // List<FichePaie> fichePaies = fichePaieService.findByMoisAndAnneeAndEmploye(mois, annee, employeId);
     List<Employe> employes = employeService.getAllEmploye();
-    // List<FichePaie> fichePaies = fichePaieService.getAllFichePaie();
+    List<FichePaie> fichePaies = fichePaieService.getAllFichePaie();
 
     model.addAttribute("fichePaies", fichePaies);
     model.addAttribute("employes", employes);
@@ -66,13 +71,8 @@ public class FichePaieController {
             model.addAttribute("employes", employes);
             return "fichePaie/generer";
         }
-        
-        Integer monthly_working_days = 22;
 
-        Integer totalAbscence = 0; // attendre configuration des conges
-        Integer totalworkingdays =  monthly_working_days - totalAbscence;
-
-        Double mb = (employe.getSalaireBase() / monthly_working_days) * totalworkingdays;
+        Double mb = historiqueSalaireService.findFirstByEmployeIdOrderByDateDebutDesc(employeId).getSalaireBase();
         Double mn = mb * 0.9;
 
         FichePaie fichePaie = new FichePaie();
@@ -82,8 +82,7 @@ public class FichePaieController {
         fichePaie.setMontantBrut(mb);
         fichePaie.setMontantNet(mn);
         fichePaie.setDatePaiement(datePaiement);
-        fichePaie.setJoursTravailles(totalworkingdays);
-        fichePaie.setJoursConge(totalAbscence);
+        fichePaie.setDateCreation(LocalDateTime.now());
 
         fichePaieService.saveFichePaie(fichePaie);
 
