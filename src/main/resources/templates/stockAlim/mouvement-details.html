@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alimentaire - Détails mouvement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/stock-alim.css}">
+</head>
+<body class="stock-page">
+<aside th:replace="stockAlim/fragments :: sidebar('mouvements')"></aside>
+
+<main class="stock-main">
+    <div class="page-top">
+        <div>
+            <h1 class="page-title">Détails du mouvement</h1>
+            <p class="page-subtitle">Vue de la table MouvementsStock et de ses lignes.</p>
+        </div>
+        <a class="btn btn-secondary" th:href="@{/stockAlim/mouvements}">Retour</a>
+    </div>
+
+    <div class="grid two">
+        <section class="card card-pad">
+            <h2 class="card-title">Informations générales</h2>
+            <div class="table-wrap" style="margin-top:14px;">
+                <table class="table">
+                    <tbody>
+                    <tr><th>Date</th><td th:text="${mouvement.dateMvt}">Date</td></tr>
+                    <tr><th>Type</th><td th:text="${mouvement.type != null ? mouvement.type.libelle : '-'}">Type</td></tr>
+                    <tr><th>Fournisseur</th><td th:text="${mouvement.fournisseur != null ? mouvement.fournisseur.nom : '-'}">Fournisseur</td></tr>
+                    <tr><th>Motif</th><td th:text="${mouvement.motif}">Motif</td></tr>
+                    <tr><th>ID utilisateur</th><td th:text="${mouvement.user != null ? mouvement.user.id : '-'}">-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card card-pad">
+            <h2 class="card-title">Lignes</h2>
+            <div class="table-wrap" style="margin-top:14px;">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Aliment</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                        <th>Bovin</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(lignes)}">
+                        <td colspan="4" class="empty">Aucune ligne.</td>
+                    </tr>
+                    <tr th:each="ligne : ${lignes}" th:if="${!#lists.isEmpty(lignes)}">
+                        <td th:text="${ligne.aliment.nom}">Aliment</td>
+                        <td th:text="${ligne.quantite}">0</td>
+                        <td th:text="${ligne.prixUnitaire}">0</td>
+                        <td th:text="${ligne.bovinId != null ? ligne.bovinId : '-'}">-</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

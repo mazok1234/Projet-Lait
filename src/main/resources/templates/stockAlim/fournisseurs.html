@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alimentaire - Fournisseurs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/stock-alim.css}">
+</head>
+<body class="stock-page">
+<aside th:replace="stockAlim/fragments :: sidebar('fournisseurs')"></aside>
+
+<main class="stock-main">
+    <div th:if="${success}" class="notice success" th:text="${success}"></div>
+    <div th:if="${error}" class="notice error" th:text="${error}"></div>
+
+    <div class="page-top">
+        <div>
+            <h1 class="page-title">Gestion fournisseurs</h1>
+            <p class="page-subtitle">Liste, recherche, création et suppression.</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/stockAlim/fournisseurs/new}"><i class="fas fa-plus"></i>Ajouter fournisseur</a>
+    </div>
+
+    <section class="card card-pad">
+        <form class="actions" th:action="@{/stockAlim/fournisseurs}" method="get">
+            <input class="input" type="search" name="q" placeholder="Rechercher..." th:value="${q}">
+            <button class="btn btn-secondary" type="submit">Filtrer</button>
+        </form>
+
+        <div class="table-wrap" style="margin-top:16px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(fournisseurs)}">
+                    <td colspan="4" class="empty">Aucun fournisseur trouvé.</td>
+                </tr>
+                <tr th:each="fournisseur : ${fournisseurs}" th:if="${!#lists.isEmpty(fournisseurs)}">
+                    <td th:text="${fournisseur.nom}">Nom</td>
+                    <td th:text="${fournisseur.telephone}">Téléphone</td>
+                    <td th:text="${fournisseur.adresse}">Adresse</td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-secondary btn-small" th:href="@{/stockAlim/fournisseurs/{id}/edit(id=${fournisseur.id})}">Modifier</a>
+                            <form th:action="@{/stockAlim/fournisseurs/{id}/delete(id=${fournisseur.id})}" method="post" onsubmit="return confirm('Supprimer ce fournisseur ?');">
+                                <button class="btn btn-danger btn-small" type="submit">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

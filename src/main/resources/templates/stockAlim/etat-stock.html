@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alimentaire - État du stock</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/stock-alim.css}">
+</head>
+<body class="stock-page">
+<aside th:replace="stockAlim/fragments :: sidebar('etat-stock')"></aside>
+
+<main class="stock-main">
+    <div class="page-top">
+        <div>
+            <h1 class="page-title">État du stock</h1>
+            <p class="page-subtitle">Lecture directe de la vue logique du stock actuel.</p>
+        </div>
+    </div>
+
+    <section class="card card-pad">
+        <form class="actions" th:action="@{/stockAlim/etat-stock}" method="get">
+            <input class="input" type="search" name="q" placeholder="Rechercher un aliment..." th:value="${q}">
+            <input class="input" type="date" name="du" th:value="${du}" title="Date debut">
+            <input class="input" type="date" name="au" th:value="${au}" title="Date fin">
+            <select class="input" name="etat">
+                <option value="TOUS" th:selected="${etat == null || etat == 'TOUS'}">Tous les statuts</option>
+                <option value="BAS" th:selected="${etat == 'BAS'}">Stock bas</option>
+                <option value="OK" th:selected="${etat == 'OK'}">Stock OK</option>
+            </select>
+            <button class="btn btn-secondary" type="submit">Filtrer</button>
+            <a class="btn btn-primary" th:href="@{/stockAlim/alertes}">Voir alertes</a>
+        </form>
+
+        <div th:if="${errors != null and !#lists.isEmpty(errors)}" style="margin-top:16px;padding:12px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;">
+            <ul style="margin:0 0 0 18px;">
+                <li th:each="err : ${errors}" th:text="${err}">Erreur</li>
+            </ul>
+        </div>
+
+        <div class="table-wrap" style="margin-top:16px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Aliment</th>
+                    <th>Stock actuel</th>
+                    <th>Seuil</th>
+                    <th>Unité</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(stock)}">
+                    <td colspan="6" class="empty">Aucune donnée de stock.</td>
+                </tr>
+                <tr th:each="ligne : ${stock}" th:if="${!#lists.isEmpty(stock)}">
+                    <td th:text="${ligne.nom}">Aliment</td>
+                    <td th:text="${ligne.stock}">0</td>
+                    <td th:text="${ligne.seuilStockMin}">0</td>
+                    <td th:text="${ligne.unite}">Kg</td>
+                    <td>
+                        <span class="status" th:classappend="${ligne.stock <= ligne.seuilStockMin} ? ' status-low' : ' status-ok'" th:text="${ligne.stock <= ligne.seuilStockMin ? 'Bas' : 'OK'}">OK</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-secondary btn-small" th:href="@{/stockAlim/approvisionnements/new(alimentId=${ligne.id})}">Approvisionner</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

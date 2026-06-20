@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alimentaire - Aliments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/stock-alim.css}">
+</head>
+<body class="stock-page">
+<aside th:replace="stockAlim/fragments :: sidebar('aliments')"></aside>
+
+<main class="stock-main">
+    <div th:if="${success}" class="notice success" th:text="${success}"></div>
+    <div th:if="${error}" class="notice error" th:text="${error}"></div>
+
+    <div class="page-top">
+        <div>
+            <h1 class="page-title">Gestion aliments</h1>
+            <p class="page-subtitle">Produits alimentaires, seuils et prix d’achat.</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/stockAlim/aliments/new}"><i class="fas fa-plus"></i>Ajouter aliment</a>
+    </div>
+
+    <section class="card card-pad">
+        <form class="actions" th:action="@{/stockAlim/aliments}" method="get">
+            <input class="input" type="search" name="q" placeholder="Rechercher..." th:value="${q}">
+            <button class="btn btn-secondary" type="submit">Filtrer</button>
+        </form>
+
+        <div class="table-wrap" style="margin-top:16px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Désignation</th>
+                    <th>Unité</th>
+                    <th>Seuil min</th>
+                    <th>Prix achat</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(aliments)}">
+                    <td colspan="5" class="empty">Aucun aliment trouvé.</td>
+                </tr>
+                <tr th:each="aliment : ${aliments}" th:if="${!#lists.isEmpty(aliments)}">
+                    <td th:text="${aliment.nom}">Nom</td>
+                    <td th:text="${aliment.unite}">Unité</td>
+                    <td th:text="${aliment.seuilStockMin}">0</td>
+                    <td th:text="${aliment.prixAchat}">0</td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-secondary btn-small" th:href="@{/stockAlim/aliments/{id}/edit(id=${aliment.id})}">Modifier</a>
+                            <a class="btn btn-secondary btn-small" th:href="@{/stockAlim/etat-stock(q=${aliment.nom})}">Voir stock</a>
+                            <form th:action="@{/stockAlim/aliments/{id}/delete(id=${aliment.id})}" method="post" onsubmit="return confirm('Supprimer cet aliment ?');">
+                                <button class="btn btn-danger btn-small" type="submit">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

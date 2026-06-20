@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar(active)" class="stock-sidebar">
+    <div class="stock-logo">
+        <h2>Lait's Go</h2>
+        <p>Stock alimentaire</p>
+    </div>
+    <nav class="stock-nav">
+        <a th:href="@{/stockAlim}" th:classappend="${active == 'dashboard'} ? 'active' : ''">
+            <i class="fas fa-table-columns"></i><span>Tableau de bord</span>
+        </a>
+        <a th:href="@{/stockAlim/fournisseurs}" th:classappend="${active == 'fournisseurs'} ? 'active' : ''">
+            <i class="fas fa-truck-field"></i><span>Gestion Fournisseurs</span>
+        </a>
+        <a th:href="@{/stockAlim/aliments}" th:classappend="${active == 'aliments'} ? 'active' : ''">
+            <i class="fas fa-wheat-awn"></i><span>Gestion Aliments</span>
+        </a>
+        <a th:href="@{/stockAlim/approvisionnements}" th:classappend="${active == 'approvisionnements'} ? 'active' : ''">
+            <i class="fas fa-boxes-stacked"></i><span>Approvisionnements</span>
+        </a>
+        <a th:href="@{/stockAlim/consommations}" th:classappend="${active == 'consommations'} ? 'active' : ''">
+            <i class="fas fa-bowl-food"></i><span>Consommations</span>
+        </a>
+        <a th:href="@{/stockAlim/mouvements}" th:classappend="${active == 'mouvements'} ? 'active' : ''">
+            <i class="fas fa-right-left"></i><span>Mouvements de Stock</span>
+        </a>
+        <a th:href="@{/stockAlim/etat-stock}" th:classappend="${active == 'etat-stock'} ? 'active' : ''">
+            <i class="fas fa-chart-simple"></i><span>Etat du Stock</span>
+        </a>
+        <a th:href="@{/stockAlim/alertes}" th:classappend="${active == 'alertes'} ? 'active' : ''">
+            <i class="fas fa-triangle-exclamation"></i><span>Alerte Stock Bas</span>
+        </a>
+    </nav>
+</aside>
+</body>
+</html>

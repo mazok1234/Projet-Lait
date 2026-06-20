@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alimentaire - Approvisionnement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/stock-alim.css}">
+</head>
+<body class="stock-page">
+<aside th:replace="stockAlim/fragments :: sidebar('approvisionnements')"></aside>
+
+<main class="stock-main">
+    <div class="page-top">
+        <div>
+            <h1 class="page-title">Nouvel approvisionnement</h1>
+            <p class="page-subtitle">Le formulaire suit la structure MouvementsStock + MouvementStockFille.</p>
+        </div>
+    </div>
+
+    <section class="card card-pad" style="max-width:760px;">
+        <form th:action="@{/stockAlim/approvisionnements}" method="post">
+            <div th:if="${errors != null and !#lists.isEmpty(errors)}" style="margin-bottom:16px;padding:12px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;">
+                <strong>Veuillez corriger les erreurs suivantes:</strong>
+                <ul style="margin:8px 0 0 18px;">
+                    <li th:each="err : ${errors}" th:text="${err}">Erreur</li>
+                </ul>
+            </div>
+
+            <div class="form-grid">
+                <label class="form-field">
+                    <span>Aliment</span>
+                    <select class="select" name="alimentId" required>
+                        <option value="">Sélectionner aliment</option>
+                        <option th:each="aliment : ${aliments}" th:value="${aliment.id}" th:text="${aliment.nom}" th:selected="${alimentId != null and aliment.id == alimentId}"></option>
+                    </select>
+                </label>
+
+                <label class="form-field">
+                    <span>Fournisseur</span>
+                    <select class="select" name="fournisseurId" required>
+                        <option value="">Sélectionner fournisseur</option>
+                        <option th:each="fournisseur : ${fournisseurs}" th:value="${fournisseur.id}" th:text="${fournisseur.nom}" th:selected="${fournisseurId != null and fournisseur.id == fournisseurId}"></option>
+                    </select>
+                </label>
+
+                <label class="form-field">
+                    <span>Quantité</span>
+                    <input class="input" type="number" step="0.01" min="0" name="quantite" th:value="${quantite}" required>
+                </label>
+
+                <label class="form-field">
+                    <span>Prix unitaire</span>
+                    <input class="input" type="number" step="0.01" min="0" name="prixUnitaire" th:value="${prixUnitaire}" required>
+                </label>
+
+                <label class="form-field">
+                    <span>Date</span>
+                    <input class="input" type="date" name="dateMouvement" th:value="${dateMouvement}">
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Valider</button>
+                <a class="btn btn-secondary" th:href="@{/stockAlim/approvisionnements}">Annuler</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

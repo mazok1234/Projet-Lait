@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alimentaire - Fournisseur</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/stock-alim.css}">
+</head>
+<body class="stock-page">
+<aside th:replace="stockAlim/fragments :: sidebar('fournisseurs')"></aside>
+
+<main class="stock-main">
+    <div class="page-top">
+        <div>
+            <h1 class="page-title" th:text="${mode == 'modification' ? 'Modifier le fournisseur' : 'Ajouter un fournisseur'}">Fournisseur</h1>
+            <p class="page-subtitle">Formulaire basé sur la table Fournisseurs de base.sql.</p>
+        </div>
+    </div>
+
+    <section class="card card-pad" style="max-width:720px;">
+        <form th:action="@{/stockAlim/fournisseurs}" method="post">
+            <input type="hidden" name="id" th:value="${fournisseur.id}">
+
+            <div th:if="${errors != null and !#lists.isEmpty(errors)}" style="margin-bottom:16px;padding:12px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;">
+                <strong>Veuillez corriger les erreurs suivantes:</strong>
+                <ul style="margin:8px 0 0 18px;">
+                    <li th:each="err : ${errors}" th:text="${err}">Erreur</li>
+                </ul>
+            </div>
+
+            <div class="form-grid">
+                <label class="form-field">
+                    <span>Nom</span>
+                    <input class="input" type="text" name="nom" th:value="${fournisseur.nom}" required>
+                </label>
+
+                <label class="form-field">
+                    <span>Téléphone</span>
+                    <input class="input" type="text" name="telephone" th:value="${fournisseur.telephone}">
+                </label>
+
+                <label class="form-field" style="grid-column:1/-1;">
+                    <span>Adresse</span>
+                    <textarea class="input" name="adresse" rows="4" th:text="${fournisseur.adresse}"></textarea>
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit" th:text="${mode == 'modification' ? 'Mettre à jour' : 'Enregistrer'}">Enregistrer</button>
+                <a class="btn btn-secondary" th:href="@{/stockAlim/fournisseurs}">Annuler</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
