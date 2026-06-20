@@ -159,7 +159,7 @@
                 <option value="">Tous les employés</option>
                 <option th:each="employe : ${employes}"
                         th:value="${employe.id}"
-                        th:text="${employe.utilisateur.nom}">
+                        th:text="${employe.nom}">
                 </option>
             </select>
 
@@ -182,7 +182,7 @@
             <tbody>
 
             <tr th:each="fiche : ${fichePaies}">
-                <td th:text="${fiche.employe.utilisateur.nom}">
+                <td th:text="${fiche.employe.nom}">
                     Nom
                 </td>
 
