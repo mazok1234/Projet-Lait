@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alimentaire - Alertes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/stock-alim.css}">
+</head>
+<body class="stock-page">
+<aside th:replace="stockAlim/fragments :: sidebar('alertes')"></aside>
+
+<main class="stock-main">
+    <div class="page-top">
+        <div>
+            <h1 class="page-title">Alertes stock bas</h1>
+            <p class="page-subtitle">Liste des aliments sous seuil avec accès direct à l’approvisionnement.</p>
+        </div>
+    </div>
+
+    <section class="card card-pad">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Aliment</th>
+                    <th>Stock actuel</th>
+                    <th>Seuil</th>
+                    <th>Unité</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(alertes)}">
+                    <td colspan="5" class="empty">Aucune alerte active.</td>
+                </tr>
+                <tr th:each="alerte : ${alertes}" th:if="${!#lists.isEmpty(alertes)}">
+                    <td th:text="${alerte.nom}">Aliment</td>
+                    <td th:text="${alerte.stock}">0</td>
+                    <td th:text="${alerte.seuilStockMin}">0</td>
+                    <td th:text="${alerte.unite}">Kg</td>
+                    <td>
+                        <a class="btn btn-primary btn-small" th:href="@{/stockAlim/approvisionnements/new(alimentId=${alerte.id})}">Passer commande</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>
