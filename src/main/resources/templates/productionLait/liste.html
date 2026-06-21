@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lait's Go - Dernières Productions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            background: #ffffff;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+        }
+        .header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .btn-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-new:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 14px 32px;
+            border-bottom: 1px solid #f1f5f9;
+            border-top: 1px solid #f1f5f9;
+        }
+        td {
+            padding: 16px 32px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            font-size: 14px;
+        }
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 32px;
+            color: #94a3b8;
+        }
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background-color: #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .empty-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #94a3b8;
+        }
+        .empty-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Dernières productions</h2>
+        <a th:href="@{/ajouter_lait}" class="btn-new">
+            <span>+</span> Nouveau
+        </a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(productions)}" class="empty-state">
+        <div class="empty-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M19 13H5v-2h14v2zm-2-7H7v2h10V6zm2 14H5v-2h14v2zm2-15H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/>
+            </svg>
+        </div>
+        <div class="empty-text">Aucune donnée pour le moment</div>
+    </div>
+
+    <table th:if="${not #lists.isEmpty(productions)}">
+        <thead>
+            <tr>
+                <th>ID Bovin</th>
+                <th>Numéro Boucle</th>
+                <th>Quantité Totale (L)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${productions}">
+                <td th:text="${p.bovinId}">1</td>
+                <td th:text="${p.numeroBoucle}">Bov-042</td>
+                <td th:text="${p.totalQuantite}">14.50</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
