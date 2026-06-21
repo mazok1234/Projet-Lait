@@ -1,0 +1,117 @@
+.auth-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #FCF8FB;
+    padding: 24px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: #FFFFFF;
+    border: 1px solid #F0EEF0;
+    border-radius: 16px;
+    padding: 40px 36px;
+    box-shadow: 0 4px 24px rgba(26, 26, 46, 0.04);
+}
+
+.auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1A1A2E;
+    margin-bottom: 6px;
+}
+
+.auth-logo i {
+    color: #007AFF;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #6B6B7B;
+    font-size: 0.875rem;
+    margin-bottom: 32px;
+}
+
+.auth-field {
+    margin-bottom: 20px;
+}
+
+.auth-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1A1A2E;
+    margin-bottom: 8px;
+}
+
+.auth-input-wrap {
+    position: relative;
+}
+
+.auth-input-wrap i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9A98A6;
+    font-size: 0.9rem;
+}
+
+.auth-input-wrap input {
+    width: 100%;
+    padding: 12px 14px 12px 38px;
+    border: 1px solid #E5E2E8;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #1A1A2E;
+    background-color: #FCF8FB;
+    transition: border-color 0.15s ease;
+}
+
+.auth-input-wrap input:focus {
+    outline: none;
+    border-color: #007AFF;
+    background-color: #FFFFFF;
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 13px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 10px;
+    background-color: #007AFF;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.15s ease;
+}
+
+.auth-submit:hover {
+    background-color: #0066D6;
+}
+
+.auth-error {
+    background-color: #FDECEC;
+    color: #C0392B;
+    border: 1px solid #F5C6C6;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
