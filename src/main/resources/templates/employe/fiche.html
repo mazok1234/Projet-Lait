@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lait's Go - Ma fiche employé</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/employe.css}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-cow"></i>
+                <span>Lait's Go</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="active">
+                    <a href="/employe/fiche">
+                        <i class="fas fa-id-card"></i>
+                        <span>Ma fiche</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>Demander un congé</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="/logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Déconnexion</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" th:text="${session.nom} ?: 'Employé'">Employé</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+
+            <div th:if="${error}" class="card" style="padding: 20px; margin-bottom: 20px; color:#C0392B;">
+                <p th:text="${error}">Erreur</p>
+            </div>
+
+            <div th:if="${employe}">
+
+                <div class="page-header">
+                    <h1 class="page-title">Ma fiche employé</h1>
+                    <p class="page-subtitle">Vos informations personnelles et professionnelles</p>
+                </div>
+                <br>
+
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h2 class="card-title">Informations</h2>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Nom</label>
+                            <p th:text="${employe.nom}">—</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Prénom</label>
+                            <p th:text="${employe.prenom}">—</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Poste</label>
+                            <p th:text="${employe.poste != null ? employe.poste.nom : '—'}">—</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Date d'embauche</label>
+                            <p th:text="${#temporals.format(employe.dateEmbauche, 'dd/MM/yyyy')}">—</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Téléphone</label>
+                            <p th:text="${employe.telephone ?: '—'}">—</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Adresse</label>
+                            <p th:text="${employe.adresse ?: '—'}">—</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Salaire de base</label>
+                            <p th:text="${salaireActif != null ? #numbers.formatInteger(salaireActif.salaireBase, 3, 'POINT') + ' Ar' : 'Non renseigné'}">—</p>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h2 class="card-title">Mes congés</h2>
+                        <a href="#" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Demander un congé
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Du</th>
+                                    <th>Au</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${#lists.isEmpty(conges)}" class="empty-row">
+                                    <td colspan="4">
+                                        <div class="empty-state">
+                                            <i class="fas fa-inbox"></i>
+                                            <p>Aucune demande de congé pour le moment</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:unless="${#lists.isEmpty(conges)}" th:each="c : ${conges}">
+                                    <td th:text="${c.type != null ? c.type.libelle : '—'}">—</td>
+                                    <td th:text="${#temporals.format(c.dateDebut, 'dd/MM/yyyy')}">—</td>
+                                    <td th:text="${#temporals.format(c.dateFin, 'dd/MM/yyyy')}">—</td>
+                                    <td>
+                                        <span class="badge"
+                                              th:classappend="${c.statut != null and #strings.containsIgnoreCase(c.statut.libelle, 'attente')} ? 'badge-attente' : (${c.statut != null and (#strings.containsIgnoreCase(c.statut.libelle, 'valid') or #strings.containsIgnoreCase(c.statut.libelle, 'approuv'))} ? 'badge-valide' : (${c.statut != null and (#strings.containsIgnoreCase(c.statut.libelle, 'refus') or #strings.containsIgnoreCase(c.statut.libelle, 'rejet'))} ? 'badge-refuse' : ''))"
+                                              th:text="${c.statut != null ? c.statut.libelle : '—'}">—</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
