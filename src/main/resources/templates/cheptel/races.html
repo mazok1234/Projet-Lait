@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lait's Go - Races</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f1f5f9;
+            color: #475569;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+        .body {
+            padding: 24px 32px;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .btn-primary {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 14px 32px;
+            border-bottom: 1px solid #f1f5f9;
+            border-top: 1px solid #f1f5f9;
+        }
+        td {
+            padding: 14px 32px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .link {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .btn-danger {
+            padding: 8px 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ef4444;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+        .alert {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .muted {
+            color: #64748b;
+            font-size: 13px;
+            margin: 0 0 16px;
+        }
+    </style>
+</head>
+<body>
+<div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <p th:text="${successMessage}"></p>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h2>Gestion des races</h2>
+            <a class="btn-secondary" th:href="@{/cheptel}">Accueil Cheptel</a>
+        </div>
+        <div class="body">
+            <p class="muted" th:text="${raceForm.id != null} ? 'Modification de la race' : 'Ajouter une nouvelle race'"></p>
+
+            <form th:action="@{/cheptel/races}" th:object="${raceForm}" method="POST">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-row">
+                    <input type="text" th:field="*{nom}" placeholder="Nom de la race (ex: Holstein)" required />
+                    <button type="submit" class="btn-primary" th:text="${raceForm.id != null} ? 'Mettre à jour' : 'Ajouter'"></button>
+                </div>
+            </form>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(races)}">
+                    <td colspan="2">Aucune race enregistrée.</td>
+                </tr>
+                <tr th:each="r : ${races}" th:if="${!#lists.isEmpty(races)}">
+                    <td th:text="${r.nom}"></td>
+                    <td>
+                        <div class="actions">
+                            <a class="link" th:href="@{/cheptel/races/{id}/edit(id=${r.id})}">Modifier</a>
+                            <form th:action="@{/cheptel/races/{id}/delete(id=${r.id})}" method="POST">
+                                <button type="submit" class="btn-danger">Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

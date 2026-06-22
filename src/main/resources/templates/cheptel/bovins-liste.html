@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lait's Go - Cheptel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 1000px;
+            background: #ffffff;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+        }
+        .header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .btn-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-new:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f1f5f9;
+            color: #475569;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+        .filters {
+            padding: 0 32px 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .filters input,
+        .filters select {
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .filters input {
+            flex: 1;
+        }
+        .filters button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: #0f172a;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .filters button:hover {
+            background-color: #0b1220;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 14px 32px;
+            border-bottom: 1px solid #f1f5f9;
+            border-top: 1px solid #f1f5f9;
+        }
+        td {
+            padding: 16px 32px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            font-size: 14px;
+        }
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 32px;
+            color: #94a3b8;
+        }
+        .alert {
+            max-width: 1000px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+<div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <p th:text="${successMessage}"></p>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h2>Cheptel (toutes les vaches)</h2>
+        <div style="display:flex; gap:10px;">
+            <a th:href="@{/cheptel}" class="btn-secondary">Accueil Cheptel</a>
+            <a th:href="@{/cheptel/bovins/ajout}" class="btn-new"><span>+</span> Ajouter vache</a>
+        </div>
+    </div>
+
+    <form class="filters" th:action="@{/cheptel/bovins}" method="GET">
+        <input type="text" name="q" placeholder="Rechercher par numéro de boucle" th:value="${q}" />
+        <select name="actif">
+            <option value="tous" th:selected="${actif == 'tous'}">Tous</option>
+            <option value="actifs" th:selected="${actif == 'actifs'}">Actifs</option>
+            <option value="inactifs" th:selected="${actif == 'inactifs'}">Inactifs</option>
+        </select>
+        <button type="submit">Filtrer</button>
+    </form>
+
+    <div th:if="${#lists.isEmpty(bovins)}" class="empty-state">
+        Aucune vache trouvée.
+    </div>
+
+    <table th:if="${not #lists.isEmpty(bovins)}">
+        <thead>
+        <tr>
+            <th>Numéro de boucle</th>
+            <th>Race</th>
+            <th>État de santé</th>
+            <th>Date naissance</th>
+            <th>Sexe</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="b : ${bovins}">
+            <td th:text="${b.numeroBoucle}"></td>
+            <td th:text="${b.race.nom}"></td>
+            <td th:text="${b.etatSante.libelle}"></td>
+            <td th:text="${b.dateNaissance}"></td>
+            <td th:text="${b.sexe}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

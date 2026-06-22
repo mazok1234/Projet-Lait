@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lait's Go - Cheptel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f5f9;
+            padding: 28px;
+        }
+        .title {
+            margin: 0 0 8px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .subtitle {
+            margin: 0 0 22px;
+            color: #64748b;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+        .btn:hover {
+            background-color: #f8fafc;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1 class="title">Module Cheptel</h1>
+        <p class="subtitle">Choisis une action</p>
+        <div class="grid">
+            <a class="btn" th:href="@{/cheptel/bovins}">Liste vaches</a>
+            <a class="btn" th:href="@{/cheptel/bovins/ajout}">Ajouter vache</a>
+            <a class="btn" th:href="@{/cheptel/races}">Ajouter race</a>
+            <a class="btn" th:href="@{/cheptel/etats-sante}">Ajouter état de santé</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

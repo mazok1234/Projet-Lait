@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lait's Go - Ajouter une vache</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px;
+        }
+        .form-container {
+            max-width: 560px;
+            background: #ffffff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        h2 {
+            margin-top: 0;
+            color: #0f172a;
+            font-size: 22px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #475569;
+            font-size: 14px;
+        }
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #334155;
+            background-color: #fff;
+        }
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        .btn {
+            flex: 1;
+            padding: 11px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+        .alert {
+            max-width: 560px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+<div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <p th:text="${successMessage}"></p>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<div class="form-container">
+    <h2>Ajouter une vache</h2>
+
+    <form th:action="@{/cheptel/bovins}" th:object="${bovinForm}" method="POST">
+        <div class="form-group">
+            <label for="numeroBoucle">Numéro de boucle :</label>
+            <input id="numeroBoucle" type="text" th:field="*{numeroBoucle}" placeholder="Ex: BOV-001" required />
+        </div>
+
+        <div class="form-group">
+            <label for="raceId">Race :</label>
+            <select id="raceId" th:field="*{raceId}" required>
+                <option value="">-- Choisir une race --</option>
+                <option th:each="r : ${races}" th:value="${r.id}" th:text="${r.nom}"></option>
+            </select>
+            <div style="margin-top:8px;">
+                <a th:href="@{/cheptel/races}" style="color:#2563eb; text-decoration:none; font-size:13px;">Gérer les races</a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="etatSanteId">État de santé :</label>
+            <select id="etatSanteId" th:field="*{etatSanteId}" required>
+                <option value="">-- Choisir un état --</option>
+                <option th:each="e : ${etatsSante}" th:value="${e.id}" th:text="${e.libelle}"></option>
+            </select>
+            <div style="margin-top:8px;">
+                <a th:href="@{/cheptel/etats-sante}" style="color:#2563eb; text-decoration:none; font-size:13px;">Gérer les états de santé</a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="dateNaissance">Date de naissance :</label>
+            <input id="dateNaissance" type="date" th:field="*{dateNaissance}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="sexe">Sexe :</label>
+            <select id="sexe" th:field="*{sexe}">
+                <option value="Femelle">Femelle</option>
+                <option value="Male">Mâle</option>
+            </select>
+        </div>
+
+        <div class="btn-container">
+            <a th:href="@{/cheptel}" class="btn btn-secondary">Accueil Cheptel</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
