@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="employeepostes")
-public class Poste{ // NE PAS CHANGER EN EmployeesPostes
+public class Poste{ 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
