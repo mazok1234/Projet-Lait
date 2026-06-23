@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:replace="finance/index :: layout(contenu=~{::.contenu})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lait's Go - Historique</title>
+</head>
+<body>
+<div class="contenu">
+    <div class="page-content">
+        <div class="page-header">
+            <h1 class="page-title">Historique des transactions</h1>
+            <p class="page-subtitle">Liste complète de toutes les transactions financières</p>
+        </div>
+
+        <div class="content-grid grid-full">
+            <div class="card card-table">
+                <div class="card-header">
+                    <h2 class="card-title">Transactions</h2>
+                    <a href="/finance" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i>
+                        Retour à la caisse
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="filters">
+                        <span class="filter-label">Filtrer</span>
+                        <input type="text" class="filter-search" id="searchInput" placeholder="Rechercher un mot..." oninput="applyFilters()">
+                        <input type="date" class="filter-date" id="dateInput" onchange="applyFilters()">
+                        <button class="btn btn-primary btn-sm" onclick="resetFilters()">
+                            <i class="fas fa-times"></i> Réinitialiser
+                        </button>
+                    </div>
+
+                    <table class="table" id="transactionsTable">
+                        <thead>
+                            <tr>
+                                <th class="sortable" onclick="sortTable(0)">
+                                    Source <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" onclick="sortTable(1)">
+                                    Type d'opération <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" onclick="sortTable(2)">
+                                    Montant <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" onclick="sortTable(3)">
+                                    Description <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" onclick="sortTable(4)">
+                                    Date <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" onclick="sortTable(5)">
+                                    Utilisateur <i class="fas fa-sort"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsBody">
+                            <tr th:each="t : ${transactions}">
+                                <td th:text="${t.sourceType} + ' #' + ${t.sourceId}">Commande #5</td>
+                                <td>
+                                    <span th:text="${t.type.libelle == 'recette' ? 'Entrée' : 'Sortie'}" 
+                                          th:classappend="${t.type.libelle == 'recette' ? 'badge badge-success' : 'badge badge-danger'}"></span>
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(t.montant, 1, 2)} + ' Ar'" data-sort="${t.montant}">0,00 Ar</td>
+                                <td th:text="${t.description}">Description</td>
+                                <td th:text="${#temporals.format(t.dateTrans, 'dd/MM/yyyy HH:mm')}" data-sort="${t.dateTrans}" th:attr="data-date=${t.dateTrans != null ? #temporals.format(t.dateTrans, 'yyyy-MM-dd') : ''}">01/01/2025 00:00</td>
+                                <td th:text="${t.utilisateur != null ? t.utilisateur.nom : '—'}">Admin</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(transactions)}">
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <i class="fas fa-inbox"></i>
+                                        <p>Aucune transaction pour le moment</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="no-result" id="noResult">
+                        <i class="fas fa-search"></i>
+                        <p>Aucune transaction ne correspond aux filtres</p>
+                    </div>
+
+                    <div class="pagination" th:if="${totalPages > 1}">
+                        <a th:if="${currentPage > 0}" 
+                           th:href="@{/finance/historique(page=${currentPage - 1})}" 
+                           class="btn btn-primary">
+                            <i class="fas fa-chevron-left"></i> Précédent
+                        </a>
+                        <button th:if="${currentPage == 0}" class="btn btn-primary" disabled>
+                            <i class="fas fa-chevron-left"></i> Précédent
+                        </button>
+                        <span class="page-info" th:text="'Page ' + (${currentPage} + 1) + ' / ' + ${totalPages}">Page 1 / 1</span>
+                        <a th:if="${currentPage < totalPages - 1}" 
+                           th:href="@{/finance/historique(page=${currentPage + 1})}" 
+                           class="btn btn-primary">
+                            Suivant <i class="fas fa-chevron-right"></i>
+                        </a>
+                        <button th:if="${currentPage >= totalPages - 1}" class="btn btn-primary" disabled>
+                            Suivant <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sortDirections = {};
+
+        function sortTable(colIndex) {
+            const tbody = document.getElementById('transactionsBody');
+            const allRows = Array.from(tbody.querySelectorAll('tr'));
+            const rows = allRows.filter(r => r.style.display !== 'none' && !r.querySelector('td[colspan]'));
+            if (rows.length === 0) return;
+
+            const key = 'col' + colIndex;
+            sortDirections[key] = sortDirections[key] === 'asc' ? 'desc' : 'asc';
+            const dir = sortDirections[key];
+
+            document.querySelectorAll('.sortable i').forEach(icon => icon.className = 'fas fa-sort');
+            const th = document.querySelectorAll('.sortable')[colIndex];
+            th.querySelector('i').className = dir === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+
+            rows.sort((a, b) => {
+                let valA, valB;
+                const cellA = a.cells[colIndex];
+                const cellB = b.cells[colIndex];
+                if (cellA.dataset.sort !== undefined) { valA = cellA.dataset.sort; valB = cellB.dataset.sort; }
+                else { valA = cellA.innerText.trim(); valB = cellB.innerText.trim(); }
+                if (colIndex === 2) { valA = parseFloat(valA) || 0; valB = parseFloat(valB) || 0; return dir === 'asc' ? valA - valB : valB - valA; }
+                return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            });
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const date = document.getElementById('dateInput').value;
+            const rows = document.querySelectorAll('#transactionsBody tr:not(.empty-row)');
+            const noResult = document.getElementById('noResult');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                if (row.querySelector('td[colspan]')) return;
+                let show = true;
+                if (search) {
+                    let rowText = '';
+                    for (let i = 0; i < row.cells.length; i++) rowText += row.cells[i].innerText.toLowerCase() + ' ';
+                    if (!rowText.includes(search)) show = false;
+                }
+                if (show && date) {
+                    const dateCell = row.cells[4];
+                    const rowDate = dateCell.dataset.date || '';
+                    if (rowDate !== date) show = false;
+                }
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            noResult.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('dateInput').value = '';
+            applyFilters();
+        }
+    </script>
+</div>
+</body>
+</html>
