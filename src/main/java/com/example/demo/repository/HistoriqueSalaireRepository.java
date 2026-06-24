@@ -9,6 +9,4 @@ public interface HistoriqueSalaireRepository extends JpaRepository<HistoriqueSal
 
     HistoriqueSalaire findFirstByEmployeIdOrderByDateDebutDesc(Integer employeId);
 
-    HistoriqueSalaire findFirstByEmployeIdAndDateFinIsNullOrderByDateDebutDesc(Integer employeId);
-
 }
