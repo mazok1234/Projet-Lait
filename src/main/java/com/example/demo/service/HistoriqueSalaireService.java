@@ -1,4 +1,3 @@
-
 package com.example.demo.service;
 
 import java.util.List;
@@ -24,6 +23,10 @@ public class HistoriqueSalaireService {
 
     public HistoriqueSalaire findFirstByEmployeIdOrderByDateDebutDesc(Integer employeId) {
         return HistoriqueSalaireRepository.findFirstByEmployeIdOrderByDateDebutDesc(employeId);
+    }
+
+    public HistoriqueSalaire getSalaireActif(Integer employeId) {
+        return HistoriqueSalaireRepository.findFirstByEmployeIdAndDateFinIsNullOrderByDateDebutDesc(employeId);
     }
 
 }

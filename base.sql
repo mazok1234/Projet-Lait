@@ -143,6 +143,7 @@ SELECT
 FROM Transactions t
 JOIN TypesTransaction tt ON t.TypeId = tt.Id;
 
+--Module-StockAliments aza ovaina 
 CREATE TABLE Fournisseurs(
     Id SERIAL PRIMARY KEY,
     Nom VARCHAR(200) NOT NULL,
@@ -203,6 +204,7 @@ LEFT JOIN MouvementStockFille mf ON a.Id = mf.AlimentId
 LEFT JOIN MouvementsStock m ON mf.MouvementStockId = m.Id
 LEFT JOIN TypeMouvement tm ON m.TypeId = tm.Id
 GROUP BY a.Id, a.Nom, a.Unite, a.SeuilStockMin;
+--Fin Module-StockAliments
 
 CREATE TABLE Clients(
     Id SERIAL PRIMARY KEY,
